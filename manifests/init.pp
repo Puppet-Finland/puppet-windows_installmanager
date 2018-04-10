@@ -83,7 +83,7 @@ class windows_installmanager
 
   $kbs_to_install.each | String $description, String $kb | {
 
-    notify { "Installing KB: ${desctiption}: kb ${kb}": }
+    notify { "Installing KB: ${description}: kb ${kb}": }
 
     ::windows_updates::kb { $kb:
       ensure   => 'present',

@@ -1,6 +1,6 @@
 # A simple wrapper class to Manage Windows updates and software from Microsoft knowledge base
 #
-# TODO: chocolatey packages, local packages from a known location
+# TODO: chocolatey packages, local packages from a known location, remote MS packages by url
 #
 # == Parameters:
 #
@@ -73,6 +73,7 @@ class windows_installmanager
   }
 
   if $install_all_security_updates {
+
     ::windows_updates::list { 'Ensure presence of all available security updates':
       ensure    => 'present',
       name_mask => 'Security*',

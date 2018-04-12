@@ -23,30 +23,31 @@
 # $wsus_server_url:: URL of the WSUS server
 class windows_installmanager
 (
-  Hash $kbs_to_install                   = {},
-  String $update_schedule_range          = '0-5',
-  String $update_schedule_weekday        = 'Saturday',
-  String $security_update_schedule_range = '0-5',
+  Hash $kbs_to_install                    = {},
+  String $update_schedule_range           = '0-5',
+  String $update_schedule_weekday         = 'Saturday',
+  String $security_update_schedule_range  = '0-5',
   String $security_update_schedule_period = 'daily',
-  String $list_folder                    = 'c:\\updates',
-  Boolean $list_available_updates        = false,
-  Boolean $install_all_updates           = false,
-  Boolean $install_all_security_updates  = false,
-  String $wsus_server_url                = undef,
+  String $list_folder                     = 'c:\\updates',
+  Boolean $list_available_updates         = false,
+  Boolean $install_all_updates            = false,
+  Boolean $install_all_security_updates   = false,
+  Optional[String] $wsus_server_url       = undef,
 
 )
 {
-  validate_str($update_schedule_range)
-  validate_str($update_schedule_weekday)
-  validate_str($security_update_schedule_range)
-  validate_str($security_update_schedule_range)
+  validate_string($update_schedule_range)
+  validate_string($update_schedule_weekday)
+  validate_string($security_update_schedule_range)
+  validate_string($security_update_schedule_range)
   validate_bool($install_all_updates)
   validate_bool($install_all_security_updates)
-  validate_str($wsus_server_url)
+  validate_string($wsus_server_url)
   validate_hash($kbs_to_install)
 
   class { '::windows_autoupdate':
-    noAutoUpdate => '1'
+    no_auto_reboot_with_logged_on_users => '1',
+    no_auto_update                      => '1'
   }
 
   if $wsus_server_url {

@@ -19,10 +19,10 @@
 # $kbs_to_install:: Hash of Microdsoft Kwnowledge Base tagged packages to install (installed as
 class windows_installmanager
 (
-  Boolean $install_all_updates,
-  Boolean $install_all_security_updates,
-  String $wsus_server_url,
-  Hash $kbs_to_install,
+  Boolean $install_all_updates,          = false
+  Boolean $install_all_security_updates, = false
+  String $wsus_server_url,               = undef
+  Hash $kbs_to_install                   = {},
   String $update_schedule_range          = '0-5',
   String $update_schedule_weekday        = 'Saturday',
   String $security_update_schedule_range = '0-5',

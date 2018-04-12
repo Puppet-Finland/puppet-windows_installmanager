@@ -17,16 +17,23 @@
 # $install_all_security_updates:: whether to install all available security updates 
 #
 # $kbs_to_install:: Hash of Microdsoft Kwnowledge Base tagged packages to install (installed as
+#
+# $list_folder:: Folder where to list available updates
+#
+# $wsus_server_url:: URL of the WSUS server
 class windows_installmanager
 (
-  Boolean $install_all_updates,          = false
-  Boolean $install_all_security_updates, = false
-  String $wsus_server_url,               = undef
   Hash $kbs_to_install                   = {},
   String $update_schedule_range          = '0-5',
   String $update_schedule_weekday        = 'Saturday',
   String $security_update_schedule_range = '0-5',
-  String $ecurity_update_schedule_period = 'daily',
+  String $security_update_schedule_period = 'daily',
+  String $list_folder                    = 'c:\\updates',
+  Boolean $list_available_updates        = false,
+  Boolean $install_all_updates           = false,
+  Boolean $install_all_security_updates  = false,
+  String $wsus_server_url                = undef,
+
 )
 {
   validate_str($update_schedule_range)
@@ -35,7 +42,7 @@ class windows_installmanager
   validate_str($security_update_schedule_range)
   validate_bool($install_all_updates)
   validate_bool($install_all_security_updates)
-  validate_str($wsus_server_ur)
+  validate_str($wsus_server_url)
   validate_hash($kbs_to_install)
 
   class { '::windows_autoupdate':
@@ -54,11 +61,11 @@ class windows_installmanager
 
   schedule { 'Updates schedule':
     weekday => $update_schedule_weekday,
-    range   => $update_schedule_period,
+    range   => $update_schedule_range,
   }
 
   schedule { 'Security updates schedule':
-    period => $seccurity_update_schedule_period,
+    period => $security_update_schedule_period,
     range  => $security_update_schedule_range,
   }
 
@@ -68,7 +75,7 @@ class windows_installmanager
       ensure    => 'present',
       name_mask => '*',
       schedule  => 'Updates schedule',
-      require   => Schedule[ 'Updates schedule' ],
+      require   => Schedule['Updates schedule'],
     }
   }
 
@@ -79,6 +86,27 @@ class windows_installmanager
       name_mask => 'Security*',
       schedule  => 'Security updates schedule',
       require   => Schedule[ 'Security updates schedule' ],
+    }
+  }
+
+  if $list_available_updates {
+
+    file { $list_folder:
+      ensure => directory,
+    }
+
+    windows_updates::list { 'List updates available':
+      ensure    => 'present',
+      dry_run   => 'C:\\UPDATES_AVAILABLE.txt',
+      name_mask => '*',
+      require   => File[$list_folder],
+    }
+
+    windows_updates::list { 'List security updates available':
+      ensure    => 'present',
+      dry_run   => 'C:\\SECURITY_UPDATES_AVAILABLE.txt',
+      name_mask => 'Security*',
+      require   => File[$list_folder],
     }
   }
 

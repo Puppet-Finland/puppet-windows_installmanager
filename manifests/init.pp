@@ -16,7 +16,7 @@
 #
 # $install_all_security_updates:: whether to install all available security updates 
 #
-# $kbs_to_install:: Hash of Microdsoft Kwnowledge Base tagged packages to install (installed as
+# $kbs_to_install:: Hash of Microdsoft Knowledge Base tagged packages to install
 #
 # $list_folder:: Folder where to list available updates
 #
@@ -36,14 +36,6 @@ class windows_installmanager
 
 )
 {
-  validate_string($update_schedule_range)
-  validate_string($update_schedule_weekday)
-  validate_string($security_update_schedule_range)
-  validate_string($security_update_schedule_range)
-  validate_bool($install_all_updates)
-  validate_bool($install_all_security_updates)
-  validate_string($wsus_server_url)
-  validate_hash($kbs_to_install)
 
   class { '::windows_autoupdate':
     no_auto_reboot_with_logged_on_users => '1',

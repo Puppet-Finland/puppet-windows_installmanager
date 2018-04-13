@@ -12,7 +12,7 @@ In your hiera:
     update_schedule_weekday: Saturday
     security_update_schedule_range: '0-5'
     security_update_schedule_period: daily
-    list_available_updates, Boolean: true
+    list_available_updates: true
     wsus_server_url: 'http://updates.example.com:8530'
     kbs_to_install:
       'Security Update for Windows Server 2012 R2 (KB3175024)': KB3175024

@@ -98,22 +98,20 @@ class windows_installmanager
 
     windows_updates::list { 'List updates available':
       ensure    => 'present',
-      dry_run   => 'C:\\UPDATES_AVAILABLE.txt',
+      dry_run   => "${list_folder}\\UPDATES_AVAILABLE.txt",
       name_mask => '*',
       require   => File[$list_folder],
     }
 
     windows_updates::list { 'List security updates available':
       ensure    => 'present',
-      dry_run   => 'C:\\SECURITY_UPDATES_AVAILABLE.txt',
+      dry_run   => "${list_folder}\\SECURITY_UPDATES_AVAILABLE.txt",
       name_mask => 'Security*',
       require   => File[$list_folder],
     }
   }
 
   $kbs_to_install.each | String $description, String $kb | {
-
-    notify { "Installing KB: ${description}: kb ${kb}": }
 
     ::windows_updates::kb { $kb:
       ensure   => 'present',

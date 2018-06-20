@@ -1,4 +1,9 @@
-define windows_snmp::feature
+# A define to install a windowsfeature or windowsoptionalfeature
+#
+# == Parameters:
+#
+# feature:: The feature to install
+define windows_installmanager::feature
 (
   $feature,
 )
